@@ -1,0 +1,3 @@
+#!/bin/sh
+# color picker deps: xclip, xcolor
+xcolor | xclip -selection clipboard

@@ -1,0 +1,13 @@
+#!/bin/sh
+# mirrors website. dep wget
+
+if [ $# -eq 0 ]; then
+    echo "web [url]"
+fi
+
+wget \
+--mirror \
+--page-requisites \
+--html-extension \
+--convert-links \
+$1
