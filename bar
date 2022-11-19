@@ -1,5 +1,7 @@
 #!/bin/sh
+# deps jq
 
+export WEATHER_FORMAT='F' # C, F
 export SEPARATOR=' | '
 export ENABLED_MODULES=\
 """
@@ -8,6 +10,10 @@ disk
 cpu
 uptime
 """
+
+getArea() {
+    timedatectl show | grep 'Timezone=' | awk '{split($0,a,"/"); print a[2]}'
+}
 
 get_cpu() {
     cache=/tmp/barcpu
@@ -46,7 +52,7 @@ get_memory() {
 get_weather() {
     cache=/tmp/barweather
     if [ ! -f $cache ]; then
-        curl -s http://wttr.in/\?wn0QT | grep -Eo "[[:digit:]]{1,3} °\b[FC]\b" >> $cache && cat $cache
+        curl -s "https://wttr.in/$(getArea)?format=j1" | echo "$(jq -r ".current_condition | .[].temp_$WEATHER_FORMAT") °F" >> $cache && cat $cache
     else
         cat $cache
     fi
