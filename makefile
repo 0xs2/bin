@@ -13,6 +13,7 @@ install:
 	install -Dm0755 web ${path}/web
 	install -Dm0755 col ${path}/col
 	install -Dm0755 fch ${path}/fch
+	install -Dm0755 bar ${path}/bar
 
 uninstall:
 	rm -rf -- ${path}/*
