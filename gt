@@ -1,10 +1,11 @@
 #!/bin/sh
 # just some aliases.
 
-if [ $# -eq 0 ]; then echo "gt [i, p, c, a, cl, o]" ; fi
+if [ $# -eq 0 ]; then echo "gt [i, b, p, c, a, cl, o]" ; fi
 
 case $1 in
 	i) git init ;;
+	b) git branch -M main ;;
 	p) git push -u origin main ;;
 	a) git add * ;;
 	c) git commit -m "pushed $(date +%s)" ;;
