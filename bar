@@ -23,14 +23,14 @@ get_cpu() {
 }
 
 get_uptime() {
-    uptime -p | grep -Eo '[[:digit:]]{1,3} \w' | tr -d ' ' | tr '\n' ' '
+    echo ⏱️ $(uptime -p | grep -Eo '[[:digit:]]{1,3} \w' | tr -d ' ' | tr '\n' ' ')
 }
 
 get_disk() {
     cache=/tmp/bardisk
     if [ ! -f $cache ] || [ "$(( $(date +"%s") - $(stat -c "%Y" "$cache") ))" -gt "3600"  ]; then
         rm -rf $cache
-        df -h "/home" | awk ' /[0-9]/ {print $3 "/" $2}' |  tr '[A-Z]' '[a-z]' >> $cache && cat $cache
+        df -h "/home" | awk ' /[0-9]/ {print "🖴  " $3 "/" $2}' |  tr '[A-Z]' '[a-z]' >> $cache && cat $cache
     else
         cat $cache
     fi
@@ -40,7 +40,7 @@ get_memory() {
     cache=/tmp/barmemory
     if [ ! -f $cache ] || [ "$(( $(date +"%s") - $(stat -c "%Y" "$cache") ))" -gt "30"  ]; then
         rm -rf $cache
-        free --mebi | sed -n '2{p;q}' | awk '{printf ("%2.2fg/%2.2fg\n", ( $3 / 1024), ($2 / 1024))}' >> $cache && cat $cache
+        echo 💻 $(free --mebi | sed -n '2{p;q}' | awk '{printf ("%2.2fg/%2.2fg\n", ( $3 / 1024), ($2 / 1024))}') >> $cache && cat $cache
     else
         cat $cache
     fi
@@ -52,7 +52,7 @@ get_weather() {
 		rm -rf $cache
         http=$(curl --fail -sL "https://wttr.in/$LOCATION?format=j1")
 		if [ "$http" != '' ]; then 
-		echo $http | echo "$(jq -r ".current_condition | .[].temp_$WEATHER_FORMAT") °F" >> $cache && cat $cache;
+		echo $http | echo "🌦️ $(jq -r ".current_condition | .[].temp_$WEATHER_FORMAT") °F" >> $cache && cat $cache;
 		fi
     else
         cat $cache
