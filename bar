@@ -2,6 +2,7 @@
 # deps jq
 
 export WEATHER_FORMAT='F' # C, F
+export LOCATION='Los_Angeles'
 export SEPARATOR=' | '
 export ENABLED_MODULES=\
 """
@@ -10,10 +11,6 @@ disk
 memory
 uptime
 """
-
-getArea() {
-    timedatectl show | grep 'Timezone=' | awk '{split($0,a,"/"); print a[2]}'
-}
 
 get_cpu() {
     cache=/tmp/barcpu
@@ -53,7 +50,7 @@ get_weather() {
     cache=/tmp/barweather
     if [ ! -f $cache ] || [ "$(( $(date +"%s") - $(stat -c "%Y" "$cache") ))" -gt "1800" ]; then
 		rm -rf $cache
-        http=$(curl --fail -sL 'https://wttr.in/Los_Angeles?format=j1')
+        http=$(curl --fail -sL "https://wttr.in/$LOCATION?format=j1")
 		if [ "$http" != '' ]; then 
 		echo $http | echo "$(jq -r ".current_condition | .[].temp_$WEATHER_FORMAT") °F" >> $cache && cat $cache;
 		fi
