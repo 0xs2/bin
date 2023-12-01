@@ -1,6 +1,15 @@
 #!/bin/sh
 # deps jq
 
+# credit :
+@ https://github.com/mitchweaver/mmbar
+
+# kde :
+# https://store.kde.org/p/1166510 # command output widget
+
+# gnome :
+# https://extensions.gnome.org/extension/2932/executor/ # executor
+
 export WEATHER_FORMAT='F' # C, F
 export LOCATION='Los_Angeles'
 export SEPARATOR=' | '
