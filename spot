@@ -1,32 +1,37 @@
 #!/bin/sh
 # download spotify playlist
 
-program='https://codeload.github.com/spotDL/spotify-downloader/zip/master'
 musicpath=$HOME/Music
 
 if [ $# -eq 0 ]; then 
     echo "spot [install, get]"
 fi
 
-if [[ $3 = *'--p'* ]]; then
+if [ "$3" = '--p' ]; then
     path=$musicpath/$4
     mkdir -p $path
-elif [ ! $3 ]; then
+elif [ ! "$3" ]; then
     path=$musicpath
+fi
+
+
+if echo "$2" | grep -q "?si="; then
+    link=$(echo "$2" | cut -d '?' -f 1)
+else
+   link=$2
 fi
 
 case "$1" in
 install)
-if command -v  pacman >/dev/null ; then 
-    sudo pacman -S python-pip
-    sudo pip install $program
-elif command -v apt >/dev/null ; then 
-    sudo apt-get install python3-pip
-    sudo pip3 install $program 
-fi
+curl -s https://api.github.com/repos/spotDL/spotify-downloader/releases/latest \
+| grep "browser_download_url.*linux" \
+| cut -d : -f 2,3 \
+| tr -d \" \
+| wget -O spotdl -qi -
+sudo mv spotdl /usr/local/bin
+echo "installed spotdl"
 ;;
-
 get)
-spotdl download "$2" --output $path
+spotdl --preload $link --threads 5 --max-retries 10 --output $path
 ;;
 esac
